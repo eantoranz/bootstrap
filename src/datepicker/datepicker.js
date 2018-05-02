@@ -56,6 +56,7 @@ angular.module('ui.bootstrap.datepicker', ['ui.bootstrap.dateparser', 'ui.bootst
     'minDate',
     'minMode',
     'monthColumns',
+    'onChangeActiveDate',
     'showWeeks',
     'shortcutPropagation',
     'startingDay',
@@ -65,6 +66,7 @@ angular.module('ui.bootstrap.datepicker', ['ui.bootstrap.dateparser', 'ui.bootst
     switch (key) {
       case 'customClass':
       case 'dateDisabled':
+      case 'onChangeActiveDate':
         $scope[key] = $scope.datepickerOptions[key] || angular.noop;
         break;
       case 'datepickerMode':
@@ -174,6 +176,7 @@ angular.module('ui.bootstrap.datepicker', ['ui.bootstrap.dateparser', 'ui.bootst
     } else {
       self.activeDate = new Date();
     }
+    $scope.onChangeActiveDate(self.activeDate);
 
     var date = ngModelCtrl.$modelValue ? new Date(ngModelCtrl.$modelValue) : new Date();
     this.activeDate = !isNaN(date) ?
@@ -274,6 +277,7 @@ angular.module('ui.bootstrap.datepicker', ['ui.bootstrap.dateparser', 'ui.bootst
       setMode(self.modes[self.modes.indexOf($scope.datepickerMode) - 1]);
 
       $scope.$emit('uib:datepicker.mode');
+      $scope.onChangeActiveDate(self.activeDate);
     }
 
     $scope.$broadcast('uib:datepicker.focus');
@@ -283,6 +287,7 @@ angular.module('ui.bootstrap.datepicker', ['ui.bootstrap.dateparser', 'ui.bootst
     var year = self.activeDate.getFullYear() + direction * (self.step.years || 0),
         month = self.activeDate.getMonth() + direction * (self.step.months || 0);
     self.activeDate.setFullYear(year, month, 1);
+    $scope.onChangeActiveDate(self.activeDate);
     self.refreshView();
   };
 
